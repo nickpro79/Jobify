@@ -31,3 +31,5 @@ const links = [
     icon: <IoBarChartSharp />,
   },
 ];
+
+export default links;
