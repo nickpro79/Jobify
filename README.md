@@ -1967,7 +1967,7 @@ app.patch('/api/v1/jobs/:id', (req, res) => {
   res.status(200).json({ msg: 'job modified', job });
 });
 
-// DELETE JOB
+// DELETE Job
 
 app.delete('/api/v1/jobs/:id', (req, res) => {
   const { id } = req.params;
