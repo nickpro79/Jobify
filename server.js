@@ -39,6 +39,15 @@ app.post("/api/v1/jobs", (req, res) => {
   const id = nanoid(10);
   const job = { id, company, position };
   jobs.push(job);
+  res.status(201).json({ job });
+});
+
+app.get("/api/v1/jobs/:id", (req, res) => {
+  const { id } = req.params;
+  const job = jobs.find((job) => job.id === id);
+  if (!job) {
+    return res.status(400).json({ msg: "Cannot find job" });
+  }
   res.status(200).json({ job });
 });
 
