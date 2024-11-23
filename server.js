@@ -4,6 +4,11 @@ import express from "express";
 import morgan from "morgan";
 const app = express();
 
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
+const port = process.env.PORT || 5100;
 if (process.env) app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -15,8 +20,6 @@ app.post("/", (req, res) => {
   res.json({ message: "data recieved", data: req.body });
 });
 
-const port = process.env.PORT || 5100;
-
 app.listen(port, () => {
-  console.log(`Server is running on {port}`);
+  console.log(`Server is running on ${port}`);
 });
