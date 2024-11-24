@@ -10,6 +10,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+import mongoose from "mongoose";
 const port = process.env.PORT || 5100;
 
 app.use(express.json());
@@ -34,6 +35,12 @@ app.use((err, req, res, next) => {
   res.status(500).json({ msg: "something went wrong" });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on ${port}`);
-});
+try {
+  await mongoose.connect(process.env.MONGO_URL);
+  app.listen(port, () => {
+    console.log(`Server is running on ${port}`);
+  });
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
