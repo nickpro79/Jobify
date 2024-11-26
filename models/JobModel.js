@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
-const JobSchema = mongoose.Schema(
+const JobSchema = new mongoose.Schema(
   {
     company: String,
-    postion: String,
+    position: String,
     jobStatus: {
       type: String,
       enum: ["interview", "declined", "pending"],
-      default: ["pending"],
+      default: "pending",
     },
     jobType: {
       type: String,
       enum: ["full-time", "part-time", "internship"],
-      default: ["full-time"],
+      default: "full-time",
     },
     jobLocation: {
       type: String,
