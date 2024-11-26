@@ -1,11 +1,6 @@
-impoot {StatusCodes} from 'http-status-codes'
+import { StatusCodes } from "http-status-codes";
 import Job from "../models/JobModel.js";
-import { nanoid } from "nanoid";
-
-let jobs = [
-  { id: nanoid(), company: "apple", position: "frontend" },
-  { id: nanoid(), company: "google", position: "backend" },
-];
+import { NotFoundError } from "../errors/customErrors.js";
 
 export const GetAllJobs = async (req, res) => {
   const jobs = await Job.find({});
@@ -20,9 +15,7 @@ export const CreateJobs = async (req, res) => {
 export const GetSingleJobs = async (req, res) => {
   const { id } = req.params;
   const job = await Job.findById(id);
-  if (!job) {
-    return res.status(400).json({ msg: "Cannot find job" });
-  }
+  if (!job) throw new NotFoundError(`no job with id ${id}`);
   res.status(StatusCodes.OK).json({ job });
 };
 
