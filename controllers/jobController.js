@@ -7,19 +7,18 @@ let jobs = [
 ];
 
 export const GetAllJobs = async (req, res) => {
+  const jobs = await Job.find({});
   res.status(200).json({ jobs });
 };
 
 export const CreateJobs = async (req, res) => {
-  const { company, position } = req.body;
-
-  const job = await Job.create({ company, position });
+  const job = await Job.create(req.body);
   res.status(201).json({ job });
 };
 
 export const GetSingleJobs = async (req, res) => {
   const { id } = req.params;
-  const job = jobs.find((job) => job.id === id);
+  const job = await Job.findById(id);
   if (!job) {
     return res.status(400).json({ msg: "Cannot find job" });
   }
