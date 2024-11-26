@@ -1,3 +1,4 @@
+impoot {StatusCodes} from 'http-status-codes'
 import Job from "../models/JobModel.js";
 import { nanoid } from "nanoid";
 
@@ -8,12 +9,12 @@ let jobs = [
 
 export const GetAllJobs = async (req, res) => {
   const jobs = await Job.find({});
-  res.status(200).json({ jobs });
+  res.status(StatusCodes.OK).json({ jobs });
 };
 
 export const CreateJobs = async (req, res) => {
   const job = await Job.create(req.body);
-  res.status(201).json({ job });
+  res.status(StatusCodes.CREATED).json({ job });
 };
 
 export const GetSingleJobs = async (req, res) => {
@@ -22,33 +23,29 @@ export const GetSingleJobs = async (req, res) => {
   if (!job) {
     return res.status(400).json({ msg: "Cannot find job" });
   }
-  res.status(200).json({ job });
+  res.status(StatusCodes.OK).json({ job });
 };
 
 export const UpdateJob = async (req, res) => {
-  const { company, position } = req.body;
-  if (!company || !position) {
-    return res.status(400).json({ msg: "please provide company and position" });
-  }
   const { id } = req.params;
-  const job = jobs.find((job) => job.id === id);
-  if (!job) {
+
+  const updatedJob = await Job.findByIdAndUpdate(id, req.body, {
+    new: true,
+  });
+
+  if (!updatedJob) {
     return res.status(404).json({ msg: `no job with id ${id}` });
   }
 
-  job.company = company;
-  job.position = position;
-  res.status(200).json({ msg: "job modified", job });
+  res.status(StatusCodes.OK).json({ job: updatedJob });
 };
 
 export const DeleteJob = async (req, res) => {
   const { id } = req.params;
-  const job = jobs.find((job) => job.id === id);
-  if (!job) {
+  const removedJob = await Job.findByIdAndDelete(id);
+  if (!removedJob) {
     return res.status(404).json({ msg: `no job with id ${id}` });
   }
-  const newJobs = jobs.filter((job) => job.id !== id);
-  jobs = newJobs;
 
-  res.status(200).json({ msg: "job deleted" });
+  res.status(StatusCodes.OK).json({ msg: "job deleted", job: removedJob });
 };
