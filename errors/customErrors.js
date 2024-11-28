@@ -29,4 +29,3 @@ export class UnauthorizedError extends Error {
     this.statusCode = StatusCodes.FORBIDDEN;
   }
 }
-x;

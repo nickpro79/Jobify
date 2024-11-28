@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import morgan from "morgan";
+import { body, validationResult } from "express-validator";
 
 //routers
 import jobRouter from "./routes/jobRoutes.js";
@@ -25,10 +26,22 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.post("/", (req, res) => {
-  console.log(req);
-  res.json({ message: "data recieved", data: req.body });
-});
+app.post(
+  "/api/v1/test",
+  [body("name").notEmpty().withMessage("name is required")],
+  (req, res, next) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+      const errorMessages = error.array().map((error) => error.msg);
+      return res.status(400).json({ error: errorMessages });
+    }
+    next();
+  },
+  (req, res) => {
+    const { name } = req.body;
+    res.json({ message: `hello ${name}` });
+  }
+);
 
 app.use("/api/v1/jobs", jobRouter);
 
