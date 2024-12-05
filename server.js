@@ -18,18 +18,13 @@ if (process.env.NODE_ENV === "development") {
 }
 
 import mongoose from "mongoose";
-import { validateTest } from "./middleware/validationMiddleware.js";
+
 const port = process.env.PORT || 5100;
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
-});
-
-app.post("/api/v1/test", validateTest, (req, res) => {
-  const { name } = req.body;
-  res.json({ message: `hello ${name}` });
 });
 
 app.use("/api/v1/jobs", jobRouter);
